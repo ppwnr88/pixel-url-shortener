@@ -2,97 +2,142 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>URL Shortener PPWNR CLI</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
 <style>
 
+*{
+box-sizing:border-box;
+}
+
+html,
+body{
+min-height:100%;
+}
+
 body{
 margin:0;
 background:#000;
 color:#33ff99;
 font-family:'Press Start 2P', monospace;
-overflow:hidden;
+overflow-x:hidden;
 }
-
-/* CRT scanline */
 
 body::after{
 content:"";
 position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
+inset:0;
 background:repeating-linear-gradient(
 transparent 0px,
 transparent 2px,
 rgba(0,0,0,.4) 3px
 );
 pointer-events:none;
+z-index:3;
 }
-
-/* matrix canvas */
 
 canvas{
 position:fixed;
-top:0;
-left:0;
+inset:0;
 width:100%;
 height:100%;
 opacity:.14;
+pointer-events:none;
 }
 
-/* terminal */
+main{
+position:relative;
+z-index:1;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:24px;
+padding-top:max(24px, env(safe-area-inset-top));
+padding-right:max(24px, env(safe-area-inset-right));
+padding-bottom:max(24px, env(safe-area-inset-bottom));
+padding-left:max(24px, env(safe-area-inset-left));
+}
 
 .terminal{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-width:760px;
-max-width:92%;
-background:#020202;
-padding:30px;
+width:min(760px, 100%);
+background:rgba(2, 2, 2, .94);
+padding:28px;
 border:4px solid #33ff99;
+border-radius:18px;
 box-shadow:
 0 0 10px #33ff99,
 0 0 40px #33ff9955;
+backdrop-filter:blur(2px);
 }
 
-/* header */
+.terminal-header{
+display:flex;
+align-items:flex-start;
+justify-content:space-between;
+gap:16px;
+margin-bottom:18px;
+}
 
 .title{
-margin-bottom:20px;
 font-size:12px;
+line-height:1.7;
 }
 
-/* output */
+.subtitle{
+max-width:250px;
+font-size:9px;
+line-height:1.8;
+opacity:.78;
+text-align:right;
+}
 
 .output{
 min-height:220px;
+max-height:min(42vh, 340px);
+overflow-y:auto;
+padding-right:6px;
 font-size:11px;
-line-height:1.8;
+line-height:1.85;
+}
+
+.output::-webkit-scrollbar{
+width:10px;
+}
+
+.output::-webkit-scrollbar-thumb{
+background:#33ff9955;
+border-radius:999px;
 }
 
 .prompt{
 color:#33ff99;
+margin-right:10px;
 }
 
 .line{
 margin:6px 0;
+word-break:break-word;
+overflow-wrap:anywhere;
 }
-
-/* input */
 
 .input-line{
 display:flex;
 align-items:center;
+gap:10px;
+margin-top:16px;
+padding:14px 16px;
+border:2px solid #33ff99;
+border-radius:14px;
+background:rgba(0, 26, 18, .45);
 }
 
 input{
 flex:1;
+min-width:0;
 background:none;
 border:none;
 outline:none;
@@ -101,12 +146,19 @@ font-family:'Press Start 2P', monospace;
 font-size:11px;
 }
 
+input::placeholder{
+color:#33ff9988;
+}
+
 a{
 color:#66ccff;
 }
 
 .actions{
 margin-top:12px;
+display:flex;
+flex-wrap:wrap;
+gap:10px;
 }
 
 button{
@@ -115,9 +167,11 @@ border:2px solid #33ff99;
 color:#33ff99;
 font-family:'Press Start 2P', monospace;
 font-size:10px;
-padding:8px 12px;
-margin-right:10px;
+padding:12px 14px;
+min-height:44px;
+border-radius:12px;
 cursor:pointer;
+touch-action:manipulation;
 }
 
 button:hover{
@@ -125,18 +179,96 @@ background:#33ff99;
 color:#000;
 }
 
-.line{
-margin:6px 0;
-word-break: break-all;
-overflow-wrap: anywhere;
+button:focus-visible,
+input:focus-visible{
+box-shadow:0 0 0 3px rgba(102, 204, 255, .35);
+}
+
+.helper{
+margin-top:14px;
+font-size:9px;
+line-height:1.8;
+opacity:.78;
+}
+
+@media (max-width: 720px){
+body{
+overflow-y:auto;
+}
+
+main{
+align-items:stretch;
+padding:16px;
+padding-top:max(16px, env(safe-area-inset-top));
+padding-right:max(16px, env(safe-area-inset-right));
+padding-bottom:max(16px, env(safe-area-inset-bottom));
+padding-left:max(16px, env(safe-area-inset-left));
+}
+
+.terminal{
+margin:auto 0;
+padding:20px;
+border-width:3px;
+border-radius:16px;
+}
+
+.terminal-header{
+flex-direction:column;
+gap:10px;
+}
+
+.title{
+font-size:10px;
+}
+
+.subtitle{
+max-width:none;
+font-size:8px;
+text-align:left;
+}
+
+.helper{
+font-size:8px;
+}
+
+.output,
+input{
+font-size:10px;
 }
 
 .output{
-min-height:220px;
-font-size:11px;
-line-height:1.8;
-max-height:300px;
-overflow-y:auto;
+min-height:180px;
+max-height:38vh;
+}
+
+button{
+flex:1 1 140px;
+font-size:9px;
+}
+}
+
+@media (max-width: 420px){
+.terminal{
+padding:16px;
+}
+
+.title{
+font-size:9px;
+}
+
+.output,
+input{
+font-size:9px;
+line-height:1.9;
+}
+
+.input-line{
+padding:12px;
+}
+
+button{
+width:100%;
+}
 }
 
 </style>
@@ -146,26 +278,35 @@ overflow-y:auto;
 
 <canvas id="matrix"></canvas>
 
-<div class="terminal">
+<main>
+<section class="terminal" aria-label="PPWNR URL shortener terminal">
 
+<div class="terminal-header">
 <div class="title">
 PPWNR URL SHORTENER v1.0
+</div>
+
+<!-- <div class="subtitle">
+RETRO TERMINAL MODE<br>
+OPTIMIZED FOR PHONE, TABLET, AND DESKTOP
+</div> -->
 </div>
 
 <div class="output" id="output"></div>
 
 <div class="input-line">
-<span class="prompt">></span>
-<input id="cmd" placeholder="PASTE URL AND PRESS ENTER" autofocus>
+<span class="prompt">&gt;</span>
+<input id="cmd" placeholder="PASTE URL AND PRESS ENTER" inputmode="url" enterkeyhint="send" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" autofocus>
 </div>
 
+<div class="helper">
+ENTER = SHORTEN | TYPE COPY | TYPE OPEN
 </div>
+
+</section>
+</main>
 
 <script>
-
-/* ============================= */
-/* MATRIX PARTICLES FOLLOW MOUSE */
-/* ============================= */
 
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
@@ -179,187 +320,196 @@ resize();
 window.addEventListener("resize", resize);
 
 let mouse = {
-x: canvas.width/2,
-y: canvas.height/2
+x: canvas.width / 2,
+y: canvas.height / 2
 };
 
-window.addEventListener("mousemove",(e)=>{
-mouse.x = e.clientX;
-mouse.y = e.clientY;
+window.addEventListener("mousemove", (event)=>{
+mouse.x = event.clientX;
+mouse.y = event.clientY;
 });
+
+window.addEventListener("touchmove", (event)=>{
+const touch = event.touches[0];
+
+if(!touch) return;
+
+mouse.x = touch.clientX;
+mouse.y = touch.clientY;
+}, { passive:true });
 
 const particles = [];
+const particleCount = window.innerWidth < 720 ? 110 : 220;
 
-for(let i=0;i<220;i++){
-
+for(let i = 0; i < particleCount; i++){
 particles.push({
-
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-vx:(Math.random()-0.5)*0.6,
-vy:(Math.random()-0.5)*0.6,
-char:Math.random()>0.5?"0":"1"
-
+x:Math.random() * canvas.width,
+y:Math.random() * canvas.height,
+vx:(Math.random() - 0.5) * 0.6,
+vy:(Math.random() - 0.5) * 0.6,
+char:Math.random() > 0.5 ? "0" : "1"
 });
-
 }
 
 function draw(){
+ctx.fillStyle = "rgba(0,0,0,0.05)";
+ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-ctx.fillStyle="rgba(0,0,0,0.05)";
-ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle = "#33ff99";
+ctx.font = "14px monospace";
+ctx.shadowColor = "#33ff99";
+ctx.shadowBlur = 8;
 
-ctx.fillStyle="#33ff99";
-ctx.font="14px monospace";
-
-ctx.shadowColor="#33ff99";
-ctx.shadowBlur=8;
-
-particles.forEach(p=>{
-
-const dx = mouse.x - p.x;
-const dy = mouse.y - p.y;
-
-const dist = Math.sqrt(dx*dx + dy*dy);
+particles.forEach((particle)=>{
+const dx = mouse.x - particle.x;
+const dy = mouse.y - particle.y;
+const dist = Math.sqrt(dx * dx + dy * dy);
 
 if(dist < 220){
-
-p.vx += dx * 0.0004;
-p.vy += dy * 0.0004;
-
+particle.vx += dx * 0.0004;
+particle.vy += dy * 0.0004;
 }
 
-p.x += p.vx;
-p.y += p.vy;
+particle.x += particle.vx;
+particle.y += particle.vy;
+particle.vx *= 0.96;
+particle.vy *= 0.96;
 
-p.vx *= 0.96;
-p.vy *= 0.96;
+if(particle.x < 0) particle.x = canvas.width;
+if(particle.x > canvas.width) particle.x = 0;
+if(particle.y < 0) particle.y = canvas.height;
+if(particle.y > canvas.height) particle.y = 0;
 
-if(p.x<0)p.x=canvas.width;
-if(p.x>canvas.width)p.x=0;
-if(p.y<0)p.y=canvas.height;
-if(p.y>canvas.height)p.y=0;
-
-ctx.fillText(p.char,p.x,p.y);
-
+ctx.fillText(particle.char, particle.x, particle.y);
 });
 
 requestAnimationFrame(draw);
-
 }
 
 draw();
 
-/* ============================= */
-/* CLI */
-/* ============================= */
+const input = document.getElementById("cmd");
+const output = document.getElementById("output");
 
-const input=document.getElementById("cmd");
-const output=document.getElementById("output");
-
-let lastLink="";
+let lastLink = "";
 
 function print(text){
-
-const div=document.createElement("div");
-div.className="line";
-div.innerHTML=text;
-
+const div = document.createElement("div");
+div.className = "line";
+div.innerHTML = text;
 output.appendChild(div);
-output.scrollTop=output.scrollHeight;
+output.scrollTop = output.scrollHeight;
+}
 
+function escapeHtml(value){
+return value
+.replaceAll("&", "&amp;")
+.replaceAll("<", "&lt;")
+.replaceAll(">", "&gt;")
+.replaceAll('"', "&quot;")
+.replaceAll("'", "&#39;");
+}
+
+async function writeClipboard(text){
+if(navigator.clipboard?.writeText){
+await navigator.clipboard.writeText(text);
+return;
+}
+
+const tempInput = document.createElement("textarea");
+tempInput.value = text;
+tempInput.setAttribute("readonly", "");
+tempInput.style.position = "absolute";
+tempInput.style.left = "-9999px";
+document.body.appendChild(tempInput);
+tempInput.select();
+document.execCommand("copy");
+document.body.removeChild(tempInput);
 }
 
 print("SYSTEM READY");
 print("PASTE URL AND PRESS ENTER");
+// print("MOBILE READY");
 
-input.addEventListener("keydown",async e=>{
+input.addEventListener("keydown", async (event)=>{
+if(event.key !== "Enter") return;
 
-if(e.key==="Enter"){
+const value = input.value.trim();
 
-const value=input.value.trim();
+if(!value){
+print("PASTE URL FIRST");
+return;
+}
 
-print(`<span class="prompt">></span> ${value}`);
+print(`<span class="prompt">&gt;</span> ${escapeHtml(value)}`);
 
 if(value.startsWith("http")){
-
 print("PROCESSING...");
 
-const res=await fetch("/api/shorten",{
+try{
+const res = await fetch("/api/shorten", {
 method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
-body:JSON.stringify({url:value})
+body:JSON.stringify({ url:value })
 });
 
-const data=await res.json();
+const data = await res.json();
 
-lastLink=data.shortUrl;
+if(!res.ok || !data.shortUrl){
+throw new Error(data.error || "FAILED TO SHORTEN URL");
+}
+
+lastLink = data.shortUrl;
 
 print("SHORT LINK CREATED");
-
 print(`
 <div>
-<a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>
+<a href="${data.shortUrl}" target="_blank" rel="noopener noreferrer">${data.shortUrl}</a>
 </div>
 
 <div class="actions">
-<button onclick="copyLink()">COPY</button>
-<button onclick="openLink()">OPEN</button>
+<button onclick="copyLink()" type="button">COPY</button>
+<button onclick="openLink()" type="button">OPEN</button>
 </div>
 `);
-
+}catch(error){
+print(error.message || "REQUEST FAILED");
 }
-
-else if(value==="copy"){
-
+}else if(value === "copy"){
 if(!lastLink){
 print("NO LINK");
 }else{
-navigator.clipboard.writeText(lastLink);
-print("COPIED");
+writeClipboard(lastLink)
+.then(()=>print("COPIED"))
+.catch(()=>print("COPY FAILED"));
 }
-
-}
-
-else if(value==="open"){
-
+}else if(value === "open"){
 if(lastLink){
-window.open(lastLink);
+window.open(lastLink, "_blank", "noopener,noreferrer");
 }else{
 print("NO LINK");
 }
-
-}
-
-else{
-
+}else{
 print("PASTE URL OR TYPE COPY");
-
 }
 
-input.value="";
-
-}
-
+input.value = "";
 });
 
 function copyLink(){
-
 if(!lastLink) return;
 
-navigator.clipboard.writeText(lastLink);
-print("COPIED TO CLIPBOARD");
-
+writeClipboard(lastLink)
+.then(()=>print("COPIED TO CLIPBOARD"))
+.catch(()=>print("COPY FAILED"));
 }
 
 function openLink(){
-
 if(!lastLink) return;
 
-window.open(lastLink);
-
+window.open(lastLink, "_blank", "noopener,noreferrer");
 }
 
 </script>
