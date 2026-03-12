@@ -1,276 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>URL Shortener PPWNR CLI</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PPWNR URL SHORTENER</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 
 <style>
+body{margin:0;background:#000;color:#33ff99;font-family:'Press Start 2P',monospace;overflow:hidden}
 
-*{
-box-sizing:border-box;
-}
+/* CRT */
+body::after{content:"";position:fixed;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(transparent 0px,transparent 2px,rgba(0,0,0,.35) 3px);pointer-events:none}
 
-html,
-body{
-min-height:100%;
-}
+/* MATRIX */
+canvas{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.14}
 
-body{
-margin:0;
-background:#000;
-color:#33ff99;
-font-family:'Press Start 2P', monospace;
-overflow-x:hidden;
-}
-
-body::after{
-content:"";
-position:fixed;
-inset:0;
-background:repeating-linear-gradient(
-transparent 0px,
-transparent 2px,
-rgba(0,0,0,.4) 3px
-);
-pointer-events:none;
-z-index:3;
-}
-
-canvas{
-position:fixed;
-inset:0;
-width:100%;
-height:100%;
-opacity:.14;
-pointer-events:none;
-}
-
-main{
-position:relative;
-z-index:1;
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:24px;
-padding-top:max(24px, env(safe-area-inset-top));
-padding-right:max(24px, env(safe-area-inset-right));
-padding-bottom:max(24px, env(safe-area-inset-bottom));
-padding-left:max(24px, env(safe-area-inset-left));
-}
-
+/* TERMINAL */
 .terminal{
-width:min(760px, 100%);
-background:rgba(2, 2, 2, .94);
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:760px;
+max-width:94%;
+background:#020202;
 padding:28px;
 border:4px solid #33ff99;
-border-radius:18px;
-box-shadow:
-0 0 10px #33ff99,
-0 0 40px #33ff9955;
-backdrop-filter:blur(2px);
+box-shadow:0 0 10px #33ff99,0 0 40px #33ff9955
 }
 
-.terminal-header{
-display:flex;
-align-items:flex-start;
-justify-content:space-between;
-gap:16px;
-margin-bottom:18px;
-}
-
-.title{
-font-size:12px;
-line-height:1.7;
-}
-
-.subtitle{
-max-width:250px;
-font-size:9px;
-line-height:1.8;
-opacity:.78;
-text-align:right;
-}
+.title{margin-bottom:18px;font-size:12px}
 
 .output{
-min-height:220px;
-max-height:min(42vh, 340px);
-overflow-y:auto;
-padding-right:6px;
+min-height:200px;
 font-size:11px;
-line-height:1.85;
+line-height:1.8;
+max-height:300px;
+overflow-y:auto
 }
 
-.output::-webkit-scrollbar{
-width:10px;
-}
+.line{margin:6px 0;word-break:break-word}
 
-.output::-webkit-scrollbar-thumb{
-background:#33ff9955;
-border-radius:999px;
-}
+.input-line{display:flex;align-items:center;gap:10px;margin-top:12px}
 
-.prompt{
-color:#33ff99;
-margin-right:10px;
-}
-
-.line{
-margin:6px 0;
-word-break:break-word;
-overflow-wrap:anywhere;
-}
-
-.input-line{
-display:flex;
-align-items:center;
-gap:10px;
-margin-top:16px;
-padding:14px 16px;
-border:2px solid #33ff99;
-border-radius:14px;
-background:rgba(0, 26, 18, .45);
-}
+.prompt{color:#33ff99}
 
 input{
 flex:1;
-min-width:0;
 background:none;
 border:none;
 outline:none;
 color:#33ff99;
-font-family:'Press Start 2P', monospace;
-font-size:11px;
+font-family:'Press Start 2P',monospace;
+font-size:11px
 }
 
-input::placeholder{
-color:#33ff9988;
-}
+a{color:#66ccff}
 
-a{
-color:#66ccff;
-}
-
-.actions{
-margin-top:12px;
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-}
+.actions{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px}
 
 button{
 background:#001a12;
 border:2px solid #33ff99;
 color:#33ff99;
-font-family:'Press Start 2P', monospace;
+font-family:'Press Start 2P',monospace;
 font-size:10px;
-padding:12px 14px;
-min-height:44px;
-border-radius:12px;
-cursor:pointer;
-touch-action:manipulation;
+padding:10px 14px;
+cursor:pointer
 }
 
-button:hover{
-background:#33ff99;
-color:#000;
-}
+button:hover{background:#33ff99;color:#000}
 
-button:focus-visible,
-input:focus-visible{
-box-shadow:0 0 0 3px rgba(102, 204, 255, .35);
-}
+/* MOBILE */
+@media (max-width:768px){
 
-.helper{
-margin-top:14px;
-font-size:9px;
-line-height:1.8;
-opacity:.78;
-}
-
-@media (max-width: 720px){
-body{
-overflow-y:auto;
-}
-
-main{
-align-items:stretch;
-padding:16px;
-padding-top:max(16px, env(safe-area-inset-top));
-padding-right:max(16px, env(safe-area-inset-right));
-padding-bottom:max(16px, env(safe-area-inset-bottom));
-padding-left:max(16px, env(safe-area-inset-left));
-}
+body{overflow:auto}
 
 .terminal{
-margin:auto 0;
-padding:20px;
-border-width:3px;
-border-radius:16px;
-}
-
-.terminal-header{
-flex-direction:column;
-gap:10px;
-}
-
-.title{
-font-size:10px;
-}
-
-.subtitle{
-max-width:none;
-font-size:8px;
-text-align:left;
-}
-
-.helper{
-font-size:8px;
-}
-
-.output,
-input{
-font-size:10px;
-}
-
-.output{
-min-height:180px;
-max-height:38vh;
-}
-
-button{
-flex:1 1 140px;
-font-size:9px;
-}
-}
-
-@media (max-width: 420px){
-.terminal{
-padding:16px;
-}
-
-.title{
-font-size:9px;
-}
-
-.output,
-input{
-font-size:9px;
-line-height:1.9;
-}
-
-.input-line{
-padding:12px;
-}
-
-button{
+position:relative;
+top:0;
+left:0;
+transform:none;
 width:100%;
-}
+height:100vh;
+border:none;
+padding:20px
 }
 
+.title{font-size:10px}
+
+.output{font-size:10px;max-height:55vh}
+
+input{font-size:10px}
+
+button{font-size:9px;padding:12px 14px}
+
+}
 </style>
 </head>
 
@@ -278,238 +103,197 @@ width:100%;
 
 <canvas id="matrix"></canvas>
 
-<main>
-<section class="terminal" aria-label="PPWNR URL shortener terminal">
+<div class="terminal">
 
-<div class="terminal-header">
 <div class="title">
 PPWNR URL SHORTENER v1.0
-</div>
-
-<!-- <div class="subtitle">
-RETRO TERMINAL MODE<br>
-OPTIMIZED FOR PHONE, TABLET, AND DESKTOP
-</div> -->
 </div>
 
 <div class="output" id="output"></div>
 
 <div class="input-line">
-<span class="prompt">&gt;</span>
-<input id="cmd" placeholder="PASTE URL AND PRESS ENTER" inputmode="url" enterkeyhint="send" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" autofocus>
+<span class="prompt">></span>
+<input id="cmd" placeholder="PASTE URL AND PRESS ENTER" autofocus>
 </div>
 
-<div class="helper">
-ENTER = SHORTEN | TYPE COPY | TYPE OPEN
 </div>
-
-</section>
-</main>
 
 <script>
 
-const canvas = document.getElementById("matrix");
-const ctx = canvas.getContext("2d");
+/* MATRIX */
+
+const canvas=document.getElementById("matrix")
+const ctx=canvas.getContext("2d")
 
 function resize(){
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.width=window.innerWidth
+canvas.height=window.innerHeight
 }
 
-resize();
-window.addEventListener("resize", resize);
+resize()
+window.addEventListener("resize",resize)
 
-let mouse = {
-x: canvas.width / 2,
-y: canvas.height / 2
-};
+let mouse={x:canvas.width/2,y:canvas.height/2}
 
-window.addEventListener("mousemove", (event)=>{
-mouse.x = event.clientX;
-mouse.y = event.clientY;
-});
+window.addEventListener("mousemove",e=>{
+mouse.x=e.clientX
+mouse.y=e.clientY
+})
 
-window.addEventListener("touchmove", (event)=>{
-const touch = event.touches[0];
+const particles=[]
 
-if(!touch) return;
+for(let i=0;i<180;i++){
 
-mouse.x = touch.clientX;
-mouse.y = touch.clientY;
-}, { passive:true });
-
-const particles = [];
-const particleCount = window.innerWidth < 720 ? 110 : 220;
-
-for(let i = 0; i < particleCount; i++){
 particles.push({
-x:Math.random() * canvas.width,
-y:Math.random() * canvas.height,
-vx:(Math.random() - 0.5) * 0.6,
-vy:(Math.random() - 0.5) * 0.6,
-char:Math.random() > 0.5 ? "0" : "1"
-});
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+vx:(Math.random()-0.5)*0.6,
+vy:(Math.random()-0.5)*0.6,
+char:Math.random()>0.5?"0":"1"
+})
+
 }
 
 function draw(){
-ctx.fillStyle = "rgba(0,0,0,0.05)";
-ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-ctx.fillStyle = "#33ff99";
-ctx.font = "14px monospace";
-ctx.shadowColor = "#33ff99";
-ctx.shadowBlur = 8;
+ctx.fillStyle="rgba(0,0,0,0.05)"
+ctx.fillRect(0,0,canvas.width,canvas.height)
 
-particles.forEach((particle)=>{
-const dx = mouse.x - particle.x;
-const dy = mouse.y - particle.y;
-const dist = Math.sqrt(dx * dx + dy * dy);
+ctx.fillStyle="#33ff99"
+ctx.font="14px monospace"
 
-if(dist < 220){
-particle.vx += dx * 0.0004;
-particle.vy += dy * 0.0004;
+ctx.shadowColor="#33ff99"
+ctx.shadowBlur=8
+
+particles.forEach(p=>{
+
+const dx=mouse.x-p.x
+const dy=mouse.y-p.y
+
+const dist=Math.sqrt(dx*dx+dy*dy)
+
+if(dist<220){
+p.vx+=dx*0.0004
+p.vy+=dy*0.0004
 }
 
-particle.x += particle.vx;
-particle.y += particle.vy;
-particle.vx *= 0.96;
-particle.vy *= 0.96;
+p.x+=p.vx
+p.y+=p.vy
 
-if(particle.x < 0) particle.x = canvas.width;
-if(particle.x > canvas.width) particle.x = 0;
-if(particle.y < 0) particle.y = canvas.height;
-if(particle.y > canvas.height) particle.y = 0;
+p.vx*=0.96
+p.vy*=0.96
 
-ctx.fillText(particle.char, particle.x, particle.y);
-});
+if(p.x<0)p.x=canvas.width
+if(p.x>canvas.width)p.x=0
+if(p.y<0)p.y=canvas.height
+if(p.y>canvas.height)p.y=0
 
-requestAnimationFrame(draw);
+ctx.fillText(p.char,p.x,p.y)
+
+})
+
+requestAnimationFrame(draw)
+
 }
 
-draw();
+draw()
 
-const input = document.getElementById("cmd");
-const output = document.getElementById("output");
+/* CLI */
 
-let lastLink = "";
+const input=document.getElementById("cmd")
+const output=document.getElementById("output")
+
+let lastLink=""
 
 function print(text){
-const div = document.createElement("div");
-div.className = "line";
-div.innerHTML = text;
-output.appendChild(div);
-output.scrollTop = output.scrollHeight;
+
+const div=document.createElement("div")
+div.className="line"
+div.innerHTML=text
+
+output.appendChild(div)
+output.scrollTop=output.scrollHeight
+
 }
 
-function escapeHtml(value){
-return value
-.replaceAll("&", "&amp;")
-.replaceAll("<", "&lt;")
-.replaceAll(">", "&gt;")
-.replaceAll('"', "&quot;")
-.replaceAll("'", "&#39;");
-}
+print("SYSTEM READY")
+print("PASTE URL AND PRESS ENTER")
 
-async function writeClipboard(text){
-if(navigator.clipboard?.writeText){
-await navigator.clipboard.writeText(text);
-return;
-}
+input.addEventListener("keydown",async e=>{
 
-const tempInput = document.createElement("textarea");
-tempInput.value = text;
-tempInput.setAttribute("readonly", "");
-tempInput.style.position = "absolute";
-tempInput.style.left = "-9999px";
-document.body.appendChild(tempInput);
-tempInput.select();
-document.execCommand("copy");
-document.body.removeChild(tempInput);
-}
+if(e.key==="Enter"){
 
-print("SYSTEM READY");
-print("PASTE URL AND PRESS ENTER");
-// print("MOBILE READY");
+const value=input.value.trim()
 
-input.addEventListener("keydown", async (event)=>{
-if(event.key !== "Enter") return;
-
-const value = input.value.trim();
-
-if(!value){
-print("PASTE URL FIRST");
-return;
-}
-
-print(`<span class="prompt">&gt;</span> ${escapeHtml(value)}`);
+print(`<span class="prompt">></span> ${value}`)
 
 if(value.startsWith("http")){
-print("PROCESSING...");
 
-try{
-const res = await fetch("/api/shorten", {
+print("PROCESSING...")
+
+const res=await fetch("/api/shorten",{
 method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-body:JSON.stringify({ url:value })
-});
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({url:value})
+})
 
-const data = await res.json();
+const data=await res.json()
 
-if(!res.ok || !data.shortUrl){
-throw new Error(data.error || "FAILED TO SHORTEN URL");
-}
+lastLink=data.shortUrl
 
-lastLink = data.shortUrl;
+print("SHORT LINK CREATED")
 
-print("SHORT LINK CREATED");
 print(`
 <div>
-<a href="${data.shortUrl}" target="_blank" rel="noopener noreferrer">${data.shortUrl}</a>
+<a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>
 </div>
 
 <div class="actions">
-<button onclick="copyLink()" type="button">COPY</button>
-<button onclick="openLink()" type="button">OPEN</button>
+<button onclick="copyLink()">COPY</button>
+<button onclick="openLink()">OPEN</button>
 </div>
-`);
-}catch(error){
-print(error.message || "REQUEST FAILED");
-}
-}else if(value === "copy"){
-if(!lastLink){
-print("NO LINK");
-}else{
-writeClipboard(lastLink)
-.then(()=>print("COPIED"))
-.catch(()=>print("COPY FAILED"));
-}
-}else if(value === "open"){
-if(lastLink){
-window.open(lastLink, "_blank", "noopener,noreferrer");
-}else{
-print("NO LINK");
-}
-}else{
-print("PASTE URL OR TYPE COPY");
+`)
+
 }
 
-input.value = "";
-});
+else if(value==="copy"){
+
+if(!lastLink) print("NO LINK")
+else{
+navigator.clipboard.writeText(lastLink)
+print("COPIED")
+}
+
+}
+
+else if(value==="open"){
+
+if(lastLink) window.open(lastLink)
+else print("NO LINK")
+
+}
+
+else{
+
+print("PASTE URL OR TYPE COPY")
+
+}
+
+input.value=""
+
+}
+
+})
 
 function copyLink(){
-if(!lastLink) return;
-
-writeClipboard(lastLink)
-.then(()=>print("COPIED TO CLIPBOARD"))
-.catch(()=>print("COPY FAILED"));
+if(!lastLink)return
+navigator.clipboard.writeText(lastLink)
+print("COPIED TO CLIPBOARD")
 }
 
 function openLink(){
-if(!lastLink) return;
-
-window.open(lastLink, "_blank", "noopener,noreferrer");
+if(!lastLink)return
+window.open(lastLink)
 }
 
 </script>
