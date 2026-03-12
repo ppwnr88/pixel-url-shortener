@@ -1,6 +1,6 @@
 {
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1.js" },
-    { "src": "/([a-zA-Z0-9]+)", "dest": "/api/[code].js" }
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/:code", "destination": "/api/[code]" }
   ]
 }
