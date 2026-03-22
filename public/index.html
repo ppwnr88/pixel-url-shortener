@@ -43,6 +43,24 @@ overflow-y:auto
 
 .input-line{display:flex;align-items:center;gap:10px;margin-top:12px}
 
+.promo{
+margin-top:22px;
+padding-top:18px;
+border-top:2px solid #33ff9944
+}
+
+.promo-title{
+font-size:10px;
+margin-bottom:10px;
+color:#66ccff
+}
+
+.promo-text{
+font-size:10px;
+line-height:1.8;
+margin-bottom:12px
+}
+
 .prompt{color:#33ff99}
 
 input{
@@ -95,6 +113,8 @@ input{font-size:10px}
 
 button{font-size:9px;padding:12px 14px}
 
+.promo-title,.promo-text{font-size:9px}
+
 }
 </style>
 </head>
@@ -115,6 +135,15 @@ PPWNR URL SHORTENER v1.0
 <span class="prompt">></span>
 <input id="cmd" placeholder="PASTE URL AND PRESS ENTER" autofocus>
 <button id="shortenBtn" type="button">SHORTEN</button>
+</div>
+
+<div class="promo">
+<div class="promo-title">NEED A QR CODE?</div>
+<div class="promo-text">
+CREATE QR CODES FAST AT
+<a href="https://qr.wannarat.cc" target="_blank" rel="noopener noreferrer">qr.wannarat.cc</a>
+</div>
+<button type="button" onclick="openQrTool()">OPEN QR TOOL</button>
 </div>
 
 </div>
@@ -304,6 +333,10 @@ print("COPIED TO CLIPBOARD")
 function openLink(){
 if(!lastLink)return
 window.open(lastLink)
+}
+
+function openQrTool(){
+window.open("https://qr.wannarat.cc","_blank")
 }
 
 </script>
