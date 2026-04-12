@@ -1,345 +1,384 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-<title>PPWNR URL SHORTENER</title>
+<title>URL Shortener ฟรี – ย่อลิงก์ให้สั้นและแชร์ง่าย | go.wannarat.cc</title>
+<meta name="description" content="ย่อลิงก์ยาวให้สั้นใน 1 วินาที ฟรี! ไม่ต้องสมัครสมาชิก รองรับทุกอุปกรณ์ ใช้งานได้ทันที – go.wannarat.cc URL Shortener">
+<meta name="keywords" content="url shortener, ย่อลิงก์, ย่อ url, short link, ลิงก์สั้น, short url ฟรี">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="URL Shortener ฟรี – ย่อลิงก์ให้สั้นและแชร์ง่าย">
+<meta property="og:description" content="ย่อลิงก์ยาวให้สั้นใน 1 วินาที ฟรี ไม่ต้องสมัครสมาชิก">
+<meta property="og:url" content="https://go.wannarat.cc/">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://go.wannarat.cc/">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9540032299322636" crossorigin="anonymous"></script>
 
 <style>
-body{margin:0;background:#000;color:#33ff99;font-family:'Press Start 2P',monospace;overflow:hidden}
+*{box-sizing:border-box}
+body{margin:0;background:#000;color:#33ff99;font-family:'Press Start 2P',monospace}
 
-/* CRT */
-body::after{content:"";position:fixed;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(transparent 0px,transparent 2px,rgba(0,0,0,.35) 3px);pointer-events:none}
+body::after{content:"";position:fixed;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(transparent 0px,transparent 2px,rgba(0,0,0,.3) 3px);pointer-events:none;z-index:9999}
 
-/* MATRIX */
-canvas{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.14}
+canvas{position:fixed;top:0;left:0;width:100%;height:100%;opacity:.13;pointer-events:none}
 
-/* TERMINAL */
+/* ── HERO ── */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+
 .terminal{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-width:760px;
-max-width:94%;
-background:#020202;
-padding:28px;
-border:4px solid #33ff99;
-box-shadow:0 0 10px #33ff99,0 0 40px #33ff9955
+  width:780px;max-width:100%;background:#020202;
+  padding:28px;border:4px solid #33ff99;
+  box-shadow:0 0 10px #33ff99,0 0 40px #33ff9955
 }
 
-.title{margin-bottom:18px;font-size:12px}
+.site-title{margin-bottom:4px;font-size:12px;color:#33ff99}
 
-.output{
-min-height:200px;
-font-size:11px;
-line-height:1.8;
-max-height:300px;
-overflow-y:auto
+h1{
+  font-family:'Press Start 2P',monospace;
+  font-size:8px;color:#66ccff;
+  line-height:1.8;margin:0 0 18px;font-weight:normal
 }
 
-.line{margin:6px 0;word-break:break-word}
-
+.output{min-height:160px;font-size:11px;line-height:1.8;max-height:280px;overflow-y:auto}
+.line{margin:6px 0;word-break:break-all}
 .input-line{display:flex;align-items:center;gap:10px;margin-top:12px}
-
-.promo{
-margin-top:22px;
-padding-top:18px;
-border-top:2px solid #33ff9944
-}
-
-.promo-title{
-font-size:10px;
-margin-bottom:10px;
-color:#66ccff
-}
-
-.promo-text{
-font-size:10px;
-line-height:1.8;
-margin-bottom:12px
-}
-
-.prompt{color:#33ff99}
+.prompt{color:#33ff99;white-space:nowrap}
 
 input{
-flex:1;
-background:none;
-border:none;
-outline:none;
-color:#33ff99;
-font-family:'Press Start 2P',monospace;
-font-size:11px
+  flex:1;background:none;border:none;outline:none;
+  color:#33ff99;font-family:'Press Start 2P',monospace;font-size:11px
 }
 
 a{color:#66ccff}
-
-.actions{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px}
+.actions{margin-top:10px;display:flex;flex-wrap:wrap;gap:10px}
 
 button{
-background:#001a12;
-border:2px solid #33ff99;
-color:#33ff99;
-font-family:'Press Start 2P',monospace;
-font-size:10px;
-padding:10px 14px;
-cursor:pointer
+  background:#001a12;border:2px solid #33ff99;color:#33ff99;
+  font-family:'Press Start 2P',monospace;font-size:10px;
+  padding:10px 14px;cursor:pointer;transition:background .15s,color .15s
 }
-
 button:hover{background:#33ff99;color:#000}
+button:active{transform:scale(.97)}
+.btn-success{background:#33ff99!important;color:#000!important}
 
-/* MOBILE */
-@media (max-width:768px){
+.promo{margin-top:22px;padding-top:18px;border-top:2px solid #33ff9944}
+.promo-title{font-size:10px;margin-bottom:10px;color:#66ccff}
+.promo-text{font-size:10px;line-height:1.8;margin-bottom:12px}
 
-body{overflow:auto}
+/* ── CONTENT ── */
+.content{background:#000;position:relative;z-index:1}
 
-.terminal{
-position:relative;
-top:0;
-left:0;
-transform:none;
-width:100%;
-height:100vh;
-border:none;
-padding:20px
+.section{max-width:860px;margin:0 auto;padding:60px 24px}
+.section+.section{border-top:2px solid #33ff9922}
+
+.section h2{font-size:12px;color:#33ff99;margin:0 0 24px;text-shadow:0 0 8px #33ff9988}
+.section h3{font-size:9px;color:#66ccff;margin:20px 0 8px}
+.section p,.section li{font-size:9px;line-height:2;color:#aaffcc;margin:0 0 8px}
+.section ul{list-style:none;padding:0;margin:0}
+.section ul li::before{content:"> ";color:#33ff99}
+
+.example-box{
+  background:#001a12;border:2px solid #33ff9944;
+  padding:18px;margin:16px 0;font-size:9px;line-height:2.2;word-break:break-all
 }
+.example-box .label{color:#888;font-size:8px}
+.example-box .long{color:#ff8888}
+.example-box .arrow{color:#ffcc00;margin:6px 0}
+.example-box .short{color:#33ff99}
 
-.title{font-size:10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:16px}
 
-.output{font-size:10px;max-height:55vh}
+.card{
+  background:#001a12;border:2px solid #33ff9933;padding:18px;
+  transition:border-color .2s
+}
+.card:hover{border-color:#33ff99}
+.card h3{margin:0 0 10px;font-size:9px;color:#66ccff}
+.card p{font-size:8px;margin:0;color:#99ddbb;line-height:2}
 
-input{font-size:10px}
+.faq-item{background:#001a12;border:2px solid #33ff9922;padding:16px;margin-bottom:14px}
+.faq-item h3{font-size:9px;color:#ffcc00;margin:0 0 8px}
+.faq-item p{font-size:8px;margin:0;color:#aaffcc;line-height:2}
 
-button{font-size:9px;padding:12px 14px}
+footer{text-align:center;padding:28px 20px;border-top:2px solid #33ff9922;font-size:8px;color:#33ff9966}
 
-.promo-title,.promo-text{font-size:9px}
-
+/* ── MOBILE ── */
+@media(max-width:768px){
+  body{overflow-x:hidden}
+  .hero{padding:0;align-items:flex-start;min-height:auto}
+  .terminal{width:100%;border-left:none;border-right:none;border-top:none;padding:18px}
+  .site-title{font-size:9px}
+  h1{font-size:7px}
+  .output{font-size:10px;max-height:50vh}
+  input{font-size:10px}
+  button{font-size:9px;padding:12px 14px}
+  .promo-title,.promo-text{font-size:8px}
+  .section{padding:40px 16px}
+  .section h2{font-size:10px}
+  .cards{grid-template-columns:1fr}
 }
 </style>
 </head>
 
 <body>
-
 <canvas id="matrix"></canvas>
 
+<!-- ── HERO TOOL ── -->
+<section class="hero" aria-label="URL Shortener Tool">
 <div class="terminal">
 
-<div class="title">
-PPWNR URL SHORTENER v1.0
+  <div class="site-title">[ go.wannarat.cc ]</div>
+  <h1>URL Shortener ฟรี – ย่อลิงก์ให้สั้นและแชร์ง่าย</h1>
+
+  <div class="output" id="output" role="log" aria-live="polite"></div>
+
+  <div class="input-line">
+    <span class="prompt">></span>
+    <input id="cmd" type="url" placeholder="วาง URL แล้วกด ENTER" autofocus aria-label="URL ที่ต้องการย่อ">
+    <button id="shortenBtn" type="button">SHORTEN</button>
+  </div>
+
+  <div class="promo">
+    <div class="promo-title">NEED A QR CODE?</div>
+    <div class="promo-text">
+      สร้าง QR Code ได้ที่
+      <a href="https://qr.wannarat.cc" target="_blank" rel="noopener noreferrer">qr.wannarat.cc</a>
+    </div>
+    <button type="button" onclick="openQrTool()">OPEN QR TOOL</button>
+  </div>
+
+</div>
+</section>
+
+<!-- ── SEO CONTENT ── -->
+<div class="content">
+
+  <!-- What is / Benefits / Example -->
+  <section class="section" id="what-is">
+    <h2>// URL SHORTENER คืออะไร?</h2>
+    <p>
+      URL Shortener คือเครื่องมือที่แปลง URL ยาวๆ ให้กลายเป็นลิงก์สั้นที่จำง่าย
+      แชร์ง่าย และดูเป็นมืออาชีพในทุกช่องทาง ไม่ว่าจะเป็น Social Media, Email หรือสื่อสิ่งพิมพ์
+    </p>
+    <p>
+      ลิงก์จาก e-commerce หรือระบบ tracking มักยาวและซับซ้อน
+      การย่อลิงก์ช่วยให้ดูสะอาดตาและลดความผิดพลาดจากการพิมพ์
+    </p>
+
+    <h3>ตัวอย่าง:</h3>
+    <div class="example-box" aria-label="ตัวอย่างการย่อลิงก์">
+      <div class="label">BEFORE (ลิงก์ยาว)</div>
+      <div class="long">https://www.example.com/products/category/summer-sale?ref=homepage&utm_source=facebook&utm_medium=cpc&utm_campaign=th2025</div>
+      <div class="arrow">↓ ย่อลิงก์ด้วย go.wannarat.cc</div>
+      <div class="label">AFTER (ลิงก์สั้น)</div>
+      <div class="short">https://go.wannarat.cc/aB3xZ</div>
+    </div>
+
+    <h3>ประโยชน์ที่ได้รับ:</h3>
+    <ul>
+      <li>ลิงก์สั้น จำง่าย แชร์ง่ายทุก platform</li>
+      <li>ดูเป็นมืออาชีพ เหมาะสำหรับโฆษณาและการตลาด</li>
+      <li>ใช้งานฟรี ไม่จำกัดจำนวนครั้ง</li>
+      <li>ไม่ต้องสมัครสมาชิก ใช้ได้ทันที</li>
+      <li>รองรับทุกอุปกรณ์ มือถือ แท็บเล็ต คอมพิวเตอร์</li>
+    </ul>
+  </section>
+
+  <!-- Use Cases -->
+  <section class="section" id="use-cases">
+    <h2>// USE CASES</h2>
+    <div class="cards">
+
+      <div class="card">
+        <h3>> SOCIAL MEDIA</h3>
+        <p>
+          โพสต์บน Facebook, Instagram, TikTok, X (Twitter)
+          ด้วยลิงก์สั้นสวยงาม ไม่กินพื้นที่ caption
+          เพิ่ม engagement ได้มากกว่าลิงก์ยาว
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>> MARKETING</h3>
+        <p>
+          ใส่ในโฆษณา, banner, QR code หรือสื่อสิ่งพิมพ์
+          ลิงก์สั้นทำให้แคมเปญดูน่าเชื่อถือ
+          และวัดผลได้ง่ายกว่า
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>> TRACKING</h3>
+        <p>
+          ใช้ลิงก์สั้นพร้อม UTM parameters เพื่อติดตาม
+          ที่มาของ traffic ในแต่ละช่องทาง
+          วิเคราะห์ผลแคมเปญได้อย่างแม่นยำ
+        </p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <h2>// FAQ – คำถามที่พบบ่อย</h2>
+
+    <div class="faq-item">
+      <h3>Q: ปลอดภัยไหม?</h3>
+      <p>
+        ปลอดภัย 100% – ระบบ redirect ตรงไปยัง URL ต้นทาง
+        ไม่มีมัลแวร์ ไม่มีโฆษณาแทรก ไม่เก็บข้อมูลส่วนตัวของผู้ใช้
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Q: ใช้ฟรีไหม?</h3>
+      <p>
+        ฟรี 100% ไม่มีค่าใช้จ่าย ไม่ต้องสมัครสมาชิก
+        ไม่ต้องล็อกอิน วางลิงก์แล้วกด SHORTEN ได้เลย
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Q: ลิงก์หมดอายุไหม?</h3>
+      <p>
+        ลิงก์ที่สร้างจะใช้งานได้ตลอดไม่มีวันหมดอายุ
+        สามารถแชร์และใช้งานได้ระยะยาว
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h3>Q: รองรับ URL แบบไหนบ้าง?</h3>
+      <p>
+        รองรับทุก URL ที่ขึ้นต้นด้วย http:// หรือ https://
+        ทั้ง website ทั่วไป, social media, e-commerce และอื่นๆ
+      </p>
+    </div>
+
+  </section>
+
 </div>
 
-<div class="output" id="output"></div>
-
-<div class="input-line">
-<span class="prompt">></span>
-<input id="cmd" placeholder="PASTE URL AND PRESS ENTER" autofocus>
-<button id="shortenBtn" type="button">SHORTEN</button>
-</div>
-
-<div class="promo">
-<div class="promo-title">NEED A QR CODE?</div>
-<div class="promo-text">
-CREATE QR CODES FAST AT
-<a href="https://qr.wannarat.cc" target="_blank" rel="noopener noreferrer">qr.wannarat.cc</a>
-</div>
-<button type="button" onclick="openQrTool()">OPEN QR TOOL</button>
-</div>
-
-</div>
+<footer>
+  <p>&copy; 2025 go.wannarat.cc – URL Shortener ฟรี ย่อลิงก์ง่ายๆ ใน 1 วินาที</p>
+</footer>
 
 <script>
-
-/* MATRIX */
-
+/* ── MATRIX ── */
 const canvas=document.getElementById("matrix")
 const ctx=canvas.getContext("2d")
 
-function resize(){
-canvas.width=window.innerWidth
-canvas.height=window.innerHeight
-}
-
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
 resize()
 window.addEventListener("resize",resize)
 
 let mouse={x:canvas.width/2,y:canvas.height/2}
-
-window.addEventListener("mousemove",e=>{
-mouse.x=e.clientX
-mouse.y=e.clientY
-})
+window.addEventListener("mousemove",e=>{mouse.x=e.clientX;mouse.y=e.clientY})
 
 const particles=[]
-
 for(let i=0;i<180;i++){
-
-particles.push({
-x:Math.random()*canvas.width,
-y:Math.random()*canvas.height,
-vx:(Math.random()-0.5)*0.6,
-vy:(Math.random()-0.5)*0.6,
-char:Math.random()>0.5?"0":"1"
-})
-
+  particles.push({
+    x:Math.random()*canvas.width,y:Math.random()*canvas.height,
+    vx:(Math.random()-0.5)*0.6,vy:(Math.random()-0.5)*0.6,
+    char:Math.random()>0.5?"0":"1"
+  })
 }
 
 function draw(){
-
-ctx.fillStyle="rgba(0,0,0,0.05)"
-ctx.fillRect(0,0,canvas.width,canvas.height)
-
-ctx.fillStyle="#33ff99"
-ctx.font="14px monospace"
-
-ctx.shadowColor="#33ff99"
-ctx.shadowBlur=8
-
-particles.forEach(p=>{
-
-const dx=mouse.x-p.x
-const dy=mouse.y-p.y
-
-const dist=Math.sqrt(dx*dx+dy*dy)
-
-if(dist<220){
-p.vx+=dx*0.0004
-p.vy+=dy*0.0004
+  ctx.fillStyle="rgba(0,0,0,0.05)"
+  ctx.fillRect(0,0,canvas.width,canvas.height)
+  ctx.fillStyle="#33ff99";ctx.font="14px monospace"
+  ctx.shadowColor="#33ff99";ctx.shadowBlur=8
+  particles.forEach(p=>{
+    const dx=mouse.x-p.x,dy=mouse.y-p.y
+    const dist=Math.sqrt(dx*dx+dy*dy)
+    if(dist<220){p.vx+=dx*0.0004;p.vy+=dy*0.0004}
+    p.x+=p.vx;p.y+=p.vy;p.vx*=0.96;p.vy*=0.96
+    if(p.x<0)p.x=canvas.width;if(p.x>canvas.width)p.x=0
+    if(p.y<0)p.y=canvas.height;if(p.y>canvas.height)p.y=0
+    ctx.fillText(p.char,p.x,p.y)
+  })
+  requestAnimationFrame(draw)
 }
-
-p.x+=p.vx
-p.y+=p.vy
-
-p.vx*=0.96
-p.vy*=0.96
-
-if(p.x<0)p.x=canvas.width
-if(p.x>canvas.width)p.x=0
-if(p.y<0)p.y=canvas.height
-if(p.y>canvas.height)p.y=0
-
-ctx.fillText(p.char,p.x,p.y)
-
-})
-
-requestAnimationFrame(draw)
-
-}
-
 draw()
 
-/* CLI */
-
+/* ── CLI ── */
 const input=document.getElementById("cmd")
 const output=document.getElementById("output")
 const shortenBtn=document.getElementById("shortenBtn")
-
 let lastLink=""
 
 function print(text){
+  const div=document.createElement("div")
+  div.className="line";div.innerHTML=text
+  output.appendChild(div);output.scrollTop=output.scrollHeight
+}
 
-const div=document.createElement("div")
-div.className="line"
-div.innerHTML=text
-
-output.appendChild(div)
-output.scrollTop=output.scrollHeight
-
+function escapeHtml(s){
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")
 }
 
 print("SYSTEM READY")
-print("PASTE URL AND PRESS ENTER")
+print("วาง URL แล้วกด ENTER หรือปุ่ม SHORTEN")
 
 async function submitCommand(){
-
-const value=input.value.trim()
-
-if(!value) return
-
-print(`<span class="prompt">></span> ${value}`)
-
-if(value.startsWith("http")){
-
-print("PROCESSING...")
-
-const res=await fetch("/api/shorten",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({url:value})
-})
-
-const data=await res.json()
-
-lastLink=data.shortUrl
-
-print("SHORT LINK CREATED")
-
-print(`
-<div>
-<a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>
-</div>
-
-<div class="actions">
-<button onclick="copyLink()">COPY</button>
-<button onclick="openLink()">OPEN</button>
-</div>
-`)
-
+  const value=input.value.trim()
+  if(!value)return
+  print(`<span class="prompt">></span> ${escapeHtml(value)}`)
+  if(!value.startsWith("http")){
+    print("ERROR: URL ต้องขึ้นต้นด้วย http:// หรือ https://")
+    input.value="";return
+  }
+  print("PROCESSING...")
+  shortenBtn.disabled=true
+  try{
+    const res=await fetch("/api/shorten",{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({url:value})
+    })
+    const data=await res.json()
+    lastLink=data.shortUrl
+    print("SHORT LINK CREATED ✓")
+    print(`
+      <div><a href="${data.shortUrl}" target="_blank" rel="noopener noreferrer">${data.shortUrl}</a></div>
+      <div class="actions">
+        <button onclick="copyLink(this)">COPY LINK</button>
+        <button onclick="openLink()">OPEN</button>
+      </div>
+    `)
+  }catch(e){
+    print("ERROR: ไม่สามารถย่อลิงก์ได้ กรุณาลองใหม่อีกครั้ง")
+  }
+  shortenBtn.disabled=false
+  input.value=""
 }
 
-else if(value==="copy"){
-
-if(!lastLink) print("NO LINK")
-else{
-navigator.clipboard.writeText(lastLink)
-print("COPIED")
-}
-
-}
-
-else if(value==="open"){
-
-if(lastLink) window.open(lastLink)
-else print("NO LINK")
-
-}
-
-else{
-
-print("PASTE URL OR TYPE COPY")
-
-}
-
-input.value=""
-
-}
-
-input.addEventListener("keydown",e=>{
-
-if(e.key==="Enter") submitCommand()
-
-})
-
-shortenBtn.addEventListener("click",()=>{
-submitCommand()
-})
-
-function copyLink(){
-if(!lastLink)return
-navigator.clipboard.writeText(lastLink)
-print("COPIED TO CLIPBOARD")
+function copyLink(btn){
+  if(!lastLink)return
+  navigator.clipboard.writeText(lastLink).then(()=>{
+    if(btn){
+      const orig=btn.textContent
+      btn.textContent="COPIED! ✓"
+      btn.classList.add("btn-success")
+      setTimeout(()=>{btn.textContent=orig;btn.classList.remove("btn-success")},2000)
+    }
+    print("COPIED TO CLIPBOARD ✓")
+  }).catch(()=>print("กรุณาคัดลอก URL ด้วยตนเอง"))
 }
 
 function openLink(){
-if(!lastLink)return
-window.open(lastLink)
+  if(!lastLink)return
+  window.open(lastLink,"_blank","noopener,noreferrer")
 }
 
 function openQrTool(){
-window.open("https://qr.wannarat.cc","_blank")
+  window.open("https://qr.wannarat.cc","_blank","noopener,noreferrer")
 }
 
+input.addEventListener("keydown",e=>{if(e.key==="Enter")submitCommand()})
+shortenBtn.addEventListener("click",submitCommand)
 </script>
-
 </body>
 </html>
