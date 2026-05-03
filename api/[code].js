@@ -29,9 +29,9 @@ export default async function handler(req, res) {
     return res.status(410).send("link expired");
   }
 
-  /* update click count (async ไม่ต้องรอ) */
+  /* update click count */
 
-  supabase
+  await supabase
     .from("short_links")
     .update({ clicks: (data.clicks || 0) + 1 })
     .eq("id", data.id);
