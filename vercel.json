@@ -1,4 +1,7 @@
 {
+  "buildCommand": "",
+  "outputDirectory": "public",
+  "framework": null,
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/$1" },
     { "source": "/:code", "destination": "/api/[code]" }
